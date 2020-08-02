@@ -1,3 +1,4 @@
+
 # Code sourced adapted from https://medium.com/analytics-vidhya/introduction-to-image-caption-generation-using-the-avengers-infinity-war-characters-6f14df09dbe5
 
 import torch
@@ -9,6 +10,7 @@ import os
 from torchvision import transforms 
 from build_vocab import Vocabulary
 from model import EncoderCNN, DecoderRNN
+import copyreg
 from PIL import Image
 
 
@@ -33,6 +35,7 @@ def main(image, encoder_path='models/encoder-5-3000.pkl', decoder_path='models/d
     
     # Load vocabulary wrapper
     with open(vocab_path, 'rb') as f:
+        #vocab = copyreg.pickle(f, pickle.load)
         vocab = pickle.load(f)
 
     # Build models
@@ -44,7 +47,7 @@ def main(image, encoder_path='models/encoder-5-3000.pkl', decoder_path='models/d
     # Load the trained model parameters
     encoder.load_state_dict(torch.load(encoder_path))
     decoder.load_state_dict(torch.load(decoder_path))
-
+    
     # Prepare an image
     image = load_image(image, transform)
     image_tensor = image.to(device)
@@ -62,7 +65,5 @@ def main(image, encoder_path='models/encoder-5-3000.pkl', decoder_path='models/d
         if word == '<end>':
             break
     sentence = ' '.join(sampled_caption)
-    
-    # Print out the image and the generated caption
-    print (sentence)
-    
+
+    return sentence

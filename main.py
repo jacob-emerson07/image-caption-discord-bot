@@ -4,7 +4,12 @@ from PIL import Image
 import requests
 from io import BytesIO
 import cv2 as cv
+import model_interface
 
+from build_vocab import Vocabulary
+
+import nest_asyncio
+nest_asyncio.apply()
 
 client = discord.Client()
 
@@ -35,16 +40,15 @@ def captionVideo(frame_cycle = 240):
 
 @client.event
 async def on_message(message):
-    captionVideo()
     if message.author == client.user:
         return
 
     try:
         img_url = message.attachments[0].url
-        #call descriptor function here, replace img_url with description
-        print(img_url)
-        await message.channel.send(img_url, tts=True)
-    except IndexError:
+        caption = model_interface.get_caption(img_url)
+        caption = "This picture is " + caption[8:-5]
+        await message.channel.send(caption, tts=True)
+    except (IndexError, TypeError):
         try:
             img_url = message.content
 
@@ -52,16 +56,13 @@ async def on_message(message):
             resp = requests.get(img_url)
             img = PIL.Image.open(BytesIO(resp.content))
 
-            # call descriptor function here, replace img_url with description
+            caption = model_interface.get_caption(img_url)
+            caption = "This picture is " + caption[8:-5]
             print(img_url)
-            await message.channel.send(img_url, tts=True)
+            await message.channel.send(caption, tts=True)
 
             #not sure how many exceptions PIL can possibly throw, so we use a bare except
         except:
             print("Image not detected")
 
-<<<<<<< HEAD
 client.run('')
-=======
-client.run('~~~~~')
->>>>>>> master
