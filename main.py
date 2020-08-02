@@ -60,4 +60,8 @@ async def on_message(message):
         except:
             print("Image not detected")
 
+<<<<<<< HEAD
+client.run('')
+=======
 client.run('~~~~~')
+>>>>>>> master
