@@ -60,4 +60,4 @@ async def on_message(message):
         except:
             print("Image not detected")
 
-client.run('NzM5MjI0NjA2NDQzMDQ0ODc4.XyXWkA.TSBPsHjPfuta4hBnZaaevVuTu48')
+client.run('~~~~~')
